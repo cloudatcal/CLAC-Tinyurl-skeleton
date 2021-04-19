@@ -4,7 +4,7 @@
 
 This will be the solution repo for a lab aiming to emulate the functionality of tinyurl
 
-We will take inspiration of features from [this](https://www.educative.io/courses/grokking-the-system-design-interview/m2ygV4E81AR#div-stylecolorblack-background-colore2f4c7-border-radius5px-padding5px2-requirements-and-goals-of-the-systemdiv) link
+We will take inspiration of features from [this](https://www.educative.io/courses/grokking-the-system-design-interview/m2ygV4E81AR#div-stylecolorblack-background-colore2f4c7-border-radius5px-padding5px2-requirements-and-goals-of-the-systemdiv) link, which you can optionally look at if you're interested.
 
 Some important notes and dev links:
 
