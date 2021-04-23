@@ -8,6 +8,7 @@ We will take inspiration of features from [this](https://www.educative.io/course
 
 Some important notes and dev links:
 
+- You need a Github and an AWS account for this project.
 - We reccomend using an IDE of some kind(PyCharm/VSCode/Atom). As students we get free access to the entire jetbrains toolbox. You can apply
   for a student account [here](https://www.jetbrains.com/shop/eform/students)
 
@@ -45,9 +46,9 @@ To use the SAM CLI, you need the following tools. When installing the SAM CLI, y
 
 First, we will configure our AWS credentials. These instructions can be found in step 2 of the SAM CLI install linked above. Just to explicitly explain the steps again, here are the steps to do so:
 
-**Step 1.** First you want to [create your first IAM admin user and group](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html). Follow the instructions in the following link.
-**Step 2.** [Create your own IAM access key](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey) using the AWS Management Console. Save both the access key ID and the secret access key.
-**Step 3.** Use the AWS CLI in your terminal to [configure your AWS credentials](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-set-up-credentials.html).
+1. First you want to [create your first IAM admin user and group](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html). Follow the instructions in the following link.
+2. [Create your own IAM access key](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey) using the AWS Management Console. Save both the access key ID and the secret access key.
+3. Use the AWS CLI in your terminal to [configure your AWS credentials](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-set-up-credentials.html).
 
 
 After that, please create a local_constants.py file in the project root folder for all environment variables specific to your project, which are the following:
@@ -66,8 +67,8 @@ This project is located in the sam-app folder, and contains the source code and 
 
 - redirect_handler/ - Code for the application's Lambda function.
 - events/ - Invocation events that you can use to invoke the function.
-- tests/ - Unit tests for the application code. **Not fully functional yet**
-- my_layer/ - **Not really sure what my_layer does, I assume it creates the layer but the only file inside is a make file that I don't understand**
+- tests/ - Unit tests for the application code. **Not fully functional**
+- my_layer/ - Creates a layer that allows us to import boto_utils.py in our lambda function. 
 - template.yaml - A template that defines the application's AWS resources.
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project. You can update the template to add AWS resources through the same deployment process that updates your application code.
