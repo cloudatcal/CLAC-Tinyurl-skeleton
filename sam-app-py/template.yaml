@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  sam-app
+
+  Sample SAM Template for sam-app
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 10
+
+Resources:
+  CustomLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: my_layer
+      CompatibleRuntimes:
+        - python3.8
+    Metadata:
+      BuildMethod: makefile
+  RedirectFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: redirect_handler
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Events:
+        FetchRedirect:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /{hash}
+            Method: get
+      Policies:
+        - AmazonDynamoDBReadOnlyAccess
+      Layers:
+        - !Ref CustomLayer
+
+Outputs:
+  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
+  RedirectApi:
+    Description: "API Gateway endpoint URL for Prod stage for Redirect function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+  RedirectFunction:
+    Description: "Redirect Lambda Function ARN"
+    Value: !GetAtt RedirectFunction.Arn
+  RedirectFunctionIamRole:
+    Description: "Implicit IAM Role created for Redirect function"
+    Value: !GetAtt RedirectFunctionRole.Arn
