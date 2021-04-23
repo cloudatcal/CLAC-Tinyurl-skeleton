@@ -43,13 +43,22 @@ To use the SAM CLI, you need the following tools. When installing the SAM CLI, y
 
 ## Setup
 
-Please create a local_constants.py file in the project root folder for all environment variables specific to your project, which are the following:
+First, we will configure our AWS credentials. These instructions can be found in step 2 of the SAM CLI install linked above. Just to explicitly explain the steps again, here are the steps to do so:
+
+**Step 1.** First you want to [create your first IAM admin user and group](https://docs.aws.amazon.com/IAM/latest/UserGuide/getting-started_create-admin-group.html). Follow the instructions in the following link.
+**Step 2.** [Create your own IAM access key](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html#Using_CreateAccessKey) using the AWS Management Console. Save both the access key ID and the secret access key.
+**Step 3.** Use the AWS CLI in your terminal to [configure your AWS credentials](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-getting-started-set-up-credentials.html).
+
+
+After that, please create a local_constants.py file in the project root folder for all environment variables specific to your project, which are the following:
 
 local_constants.py
 ```python
  AWS_PROFILE_NAME = '<your_local_profile_name>' # Left as "" if you deploy on the cloud and not locally
  DEPLOYED_GATEWAY = 'the.public.url.of.your.function.' # We will generate this in a later section when we deploy the serverless application
 ```
+
+**IMPORTANT** Do NOT push your access keys onto Github, as that will expose your security credentials to the Internet and someone could hijack your account and incur a lot of fees on your account. Similarly, when you work with API keys for future personal projects, do not ever push your API keys on Github either.
 
 ## Deploying the Serverless Application
 
@@ -84,7 +93,7 @@ Note: Enter yes for every 'y/n' option. It is also fine to press enter without i
 
 **IMPORTANT**: You can find your API Gateway Endpoint URL in the output values displayed after deployment. You will put this in your local_constants.py file
 
-### Deployment of the front end Flask Application on Elastic Beanstalk (EBS)
+### Create an AWS Elastic Beanstalk (EBS) Application for our Front end Flask App
 
 Now that we have deployed the serverless application on AWS, we have finished provisioning several AWS resources for our project, including Lambda functions and an API Gateway API. We will now turn to deploying the front end application on EBS. As a reminder, these resources are defined in the `template.yaml` file in this project, which can be updated to add AWS resources through the same deployment process.
 
@@ -94,12 +103,30 @@ Now that we have deployed the serverless application on AWS, we have finished pr
 
 ### CodePipeline Setup
 
-Now we are onto the coolest part of this project (in Michael's humble opinion), which is setting up the CodePipeline for our front end application. In this section
+Now we are onto the coolest part of this project (in our humble opinion), which is setting up the CodePipeline for our front end application. In this section, we will connect our pipeline to our Github repo, which will automate the continuous build, testing, and deployment of our web application after any change in our code. With this tool, anytime we push a new change to our Github repo, the web application will be automatically redeployed so developers can test their changes.
 
 1. After EBS is finished setting up, head to the CodePipeline page and click on **Pipeline** in the sidebar. Press **Create Pipeline**.
-2. In the pipeline settings, give it any name (Ex. Clacurl-Github-Pipeline)
+2. In the pipeline settings, give it any name (Ex. Clacurl-Github-Pipeline). Leave the rest of the settings at default value and select next.
+3. Choose Github Version 2 for our source provider and press **Connect to Github**. Here, we will configure a connection to our Github repo. After you follow the instructions for connecting your Github account, select the repo that you have created for the Clacurl Project, and select the main branch. Leave the other options at default settings.
+4. Skip the optional build stage.
+5. For the deploy stage, choose AWS Elastic Beanstalk for your deploy provider. Choose the application that you created earlier (we named it Clacurl) and its corresponding environment.
 
-## Optional (For building and testing sam-app locally)
+### Set up the DynamoDB Database
+
+Finally, for the last step of our project setup, we will run our migration to create the table in our database that will store the URL mappings between our generated link and the original URL. To do this, go to the project root directory and run the following command in the terminal:
+
+./
+```python
+python3 boto_utils.py 
+```
+
+_Note_: This command will run the last section of the code, which basically tells the program to only run that section of code if the file was directly run as the main program. As you can see, it only calls the migration function, which is exactly what we want the program to do. 
+
+We will have you all fill out these functions for the project assignment.
+
+
+
+## Optional Reading (For building and testing sam-app locally)
 Note: Testing the application locally is not thoroughly tested yet, so you may encounter many issues that you will have to debug. However, it may be beneficial is just read along to try and familiarize yourself with how to work more closely with sam-app.
 
 ### Use the SAM CLI to build and test locally
